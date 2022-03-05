@@ -83,7 +83,7 @@ if (document.getElementById("mentee-form") != null
                 var _techSkills = $('#techSkills').val();
 
                     $.ajax({
-                        url: '/submitFormMentee',
+                        url: '/submitForm',
                         type: 'post',
                         data: {
                             firstName: _firstName, lastName: _lastName, category: _category, countryBirth: _countryBirth,
