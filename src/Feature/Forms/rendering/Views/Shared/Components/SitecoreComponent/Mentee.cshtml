@@ -4,8 +4,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-12 side-content">
-                    <p class="top">Welcome to the 2022 test</p>
-                    <h1 class="static">Sitecore MVP Application</h1>
+                    <p class="top">Mentorship Program</p>
+                    <h1 class="static">Want to match with the best MVP?</h1>
                 </div>
             </div>
         </div>
@@ -16,132 +16,65 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card">
-                        <!--<h2 id="heading">Welcome to the 2021 Sitecore MVP Application Page</h2>
-                            <p>Fill all form field to go to next step</p> -->
-                        <!-- progressbar -->
-                        @*<ul id="progressbar" class="d-sm-none d-md-block">
-                            <li id="welcome" data-step="1"><strong>Welcome TEMP</strong></li>
-                            <li id="category" data-step="2"><strong>Category</strong></li>
-                            <li id="personal" data-step="3"><strong>Personal</strong></li>
-                            <li id="objectives" data-step="4"><strong>Objectives</strong></li>
-                            <li id="socials" data-step="5"><strong>Socials</strong></li>
-                            <li id="contributions" data-step="6"><strong>Contributions</strong></li>
-                            <li id="confirmation" data-step="7"><strong>Confirmation</strong></li>
-                        </ul>*@
-                        @*<div class="progress-wrap d-none d-sm-block d-md-none">
-                            <h3>Current Progress</h3>
-                            <div class="progress">
-                                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                        </div>*@
                         <div class="appStep fieldSet" id="step_welcome" data-step="1" hidden>
-                            <form id="categoryForm" class="form-horizontal" method="post" action="/submitApplication/">
+                            <form id="mentee-form" class="form-horizontal" method="post" action="/submitApplication/">
                                 <div class="form-card">
                                     <div class="row">
                                         <div class="col-7">
-                                            <h2 class="fs-title">Welcome</h2>
-                                        </div>
-                                        <div class="col-5">
-                                            <h2 class="steps">
-                                                Step: <span>1</span> of 7
-                                            </h2>
+                                            <h2 class="fs-title">Fill your information</h2>
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="form-group">
                                     <div class="form-check">
                                         <p>By submitting my contact information, I confirm that I have read and agree to the Sitecore Privacy Policy, which explains how Sitecore collects, processes and shares my personal data. I consent to my data being processed in accordance with Sitecore’s Privacy Policy so that Sitecore can optimize my experience with the Sitecore brand.</p>
-                                        <div class="form-check-wrap">
-                                            <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required />
-                                            @*<label class="form-check-label" for="invalidCheck">
-                                                I consent to receive communications about Sitecore’s business in accordance with Sitecore’s Privacy Policy. I understand that I can opt-out at any time.
-                                            </label>*@
-                                            <div class="invalid-feedback">
-                                                Consent to Sitecore's Privacy Policy is required for application submission.
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
-                                
-                                <div class="form-group row">
-                                    <div class="col-8">
-                                        <label class="fieldlabels">Mentee Name: </label>
-                                        <input type="text" class="form-control" id="mentor" name="mentor" placeholder="mentor" asp-for="mentor" />
+                                <div class="form-group row" style="padding-left: 15px;">
+                                    <div class="col-md-5 col-sm-12">
+                                        <label class="fieldlabels">First Name: *</label>
+                                        <input type="text" class="form-control" id="firstName" name="firstName" placeholder="" required/>
+                                    </div>
+                                    <div class="col-md-5 col-sm-12">
+                                        <label class="fieldlabels">Last Name: *</label>
+                                        <input type="text" class="form-control" id="lastName" name="lastName" placeholder="" required />
                                     </div>
                                 </div>
-                                <div class="form-group row">
+                                <div class="form-group">
                                     <div class="col-8">
                                         <div class="dropdown-group">
-                                            <label for="Category">MVP Type interested: *</label>
+                                            <label for="Category">MVP Desired: *</label>
                                             <select class="form-select dropdown" id="dllcategory" asp-for="mvpcategory" required>
                                             </select>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group row">
+                                <div class="form-group">
                                     <div class="col-8">
-                                        <label class="fieldlabels">Country/Region/Territory: *</label>
+                                        <label class="fieldlabels">Country of birth: *</label>
                                         <select class="form-select dropdown" id="ddlCountry" asp-for="country" required>
                                         </select>
                                     </div>
                                 </div>
-                                <div class="form-group row">
-                                    <div class="col-12">
-                                        <label for="onlineAcvitity">Tech skills: *</label>
-                                        <textarea class="form-control" id="onlineAcvitity" rows="3" asp-for="onlineactivity" required></textarea>
+                                <div class="form-group">
+                                    <div class="col-8">
+                                        <label class="fieldlabels">Country of residence: *</label>
+                                        <select class="form-select dropdown" id="ddlCountryResidence" asp-for="country" required>
+                                        </select>
                                     </div>
                                 </div>
-                                @*<div class="form-group row">
-            <div class="col-12">
-                <label for="offlineActivity">Summary of relevant offline professional activity: *</label>
-                <textarea class="form-control" id="offlineActivity" rows="3" asp-for="offlineactivity" required></textarea>
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="eligibility">Why do you believe you are eligible to be selected to be a Sitecore MVP? *</label>
-            <textarea class="form-control" id="eligibility" rows="3" asp-for="eligibility" required></textarea>
-        </div>
-        <div class="form-group">
-            <label for="objectives">What are your objectives for the next year? *</label>
-            <textarea class="form-control" id="txtObjectives" rows="3" asp-for="objectives" required></textarea>
-        </div>
-        <div class="form-group row">
-            <div class="col-md-5 col-sm-12">
-                <label class="fieldlabels">Official First Name: *</label>
-                <input type="text" class="form-control" id="firstName" name="firstName" placeholder="first name" asp-for="officialfirstname" required />
-            </div>
-            <div class="col-md-5 offset-md-1 col-sm-12">
-                <label class="fieldlabels">Official Last Name: *</label>
-                <input type="text" class="form-control" id="lastName" name="lastName" placeholder="last name" asp-for="officiallastname" required />
-            </div>
-        </div>
-
-        <div class="form-group row">
-            <div class="col-md-5 col-sm-12">
-                <label class="fieldlabels">Company Name: *</label>
-                <input type="text" class="form-control" id="companyName" name="companyName" placeholder="company name" asp-for="companyname" required />
-            </div>
-            <div class="col-md-5 offset-md-1 col-sm-12">
-                <label class="fieldlabels">Employment Status: *</label>
-                <select class="form-select dropdown" id="ddlEmploymentStatus" asp-for="employmentstatus" required>
-                </select>
-            </div>
-        </div>
-
-        <div class="form-group row">
-            <div class="col-md-5 col-sm-12">
-                <label class="fieldlabels">Mentor: </label>
-                <input type="text" class="form-control" id="mentor" name="mentor" placeholder="mentor" asp-for="mentor" />
-            </div>
-        </div>*@
+                                <div class="form-group">
+                                    <div class="col-10">
+                                        <label for="onlineAcvitity">Tech skills: *</label>
+                                        <textarea class="form-control" id="techSkills" rows="3" asp-for="onlineactivity" required></textarea>
+                                    </div>
+                                </div>
                                 <div class="col-12 toggle-submit">
-
-                                    <button class="btn btn-primary" id="btnStep2" type="submit">Next</button>
+                                    <button class="btn btn-primary" id="btnMenteeForm" type="submit">Next</button>
                                 </div>
                             </form>
-                            @Html.Partial("~/Views/Shared/Components/SitecoreComponent/Steps/_welcome.cshtml")
                         </div>
-                        
                     </div>
                 </div>
             </div>

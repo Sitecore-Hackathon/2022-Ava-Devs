@@ -200,7 +200,13 @@ namespace Mvp.Project.MvpSite.Rendering
           new { controller = "Application", action = "Welcome" }
         );
 
-        endpoints.MapControllerRoute(
+          endpoints.MapControllerRoute(
+          "submitFormMentee",
+          "submitFormMentee",
+          new { controller = "Mentee", action = "SubmitForm" }
+        );
+
+          endpoints.MapControllerRoute(
           "submitStep2",
           "submitStep2",
           new { controller = "Application", action = "Category" }

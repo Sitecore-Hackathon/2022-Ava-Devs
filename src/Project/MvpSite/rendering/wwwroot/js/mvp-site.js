@@ -62,7 +62,54 @@ if (document.getElementById("mentee-form") != null
 
    //setStep(currentStep);
 
+    $("#btnMenteeForm").click(function (event) {
+        'use strict'
+        event.preventDefault();
+        var forms = document.querySelectorAll('#mentee-form')
 
+        // Loop over them and prevent submission
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                //if (!form.checkValidity()) {
+                //    event.stopPropagation()
+                //}
+                //else {
+                    var _applicationId = $('#applicationId').val();
+                var _firstName = $('#firstName').val();
+                var _lastName = $('#lastName').val();
+                var _category = $("#dllcategory").find("option:selected").val();
+                var _countryBirth = $("#ddlCountry").find("option:selected").val();
+                var _countryResidence = $("#ddlCountryResidence").find("option:selected").val();
+                var _techSkills = $('#techSkills').val();
+
+                    $.ajax({
+                        url: '/submitFormMentee',
+                        type: 'post',
+                        data: {
+                            firstName: _firstName, lastName: _lastName, category: _category, countryBirth: _countryBirth,
+                            countryResidence: _countryResidence, techSkills: _techSkills
+                        },
+                        dataType: 'json',
+                        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                        success: function (data) {
+                            console.log("test");
+                            console.log(data);
+                            //if (data.success === true) {
+                            //    setStep('#step_personal', 3);
+                            //}
+                            //else {
+                            //    alert(data.responseText);
+                            //}
+                        }
+                    }).done(function () {
+                        setTimeout(function () {
+                            $("#overlay").fadeOut(300);
+                        }, 500);
+                    });
+                //}
+                form.classList.add('was-validated')
+            })
+    });
 
     $("#btnStep1").click(function (event) {
         'use strict'

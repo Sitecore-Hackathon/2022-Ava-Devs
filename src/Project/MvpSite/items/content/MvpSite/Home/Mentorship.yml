@@ -50,13 +50,10 @@ Languages:
               <p:d />
             </r>
             <r
-              uid="{FDD9E0C1-B70F-4EF4-A80E-56409A454D64}"
+              uid="{7E51F749-96A0-4F2C-B016-7C9CEB327A04}"
               p:after="r[@uid='{D842E8EB-450E-4348-A54A-E60CF16E9E52}']"
-              s:ds="{CFEB58CD-F3E0-41F3-9D6F-E6A3F679A79D}"
-              s:id="{DF79486F-2E7B-4EC8-8EFC-C9E6DFE813B7}"
-              s:par=""
-              s:ph="main"
-              s:ccb="Clear on publish" />
+              s:id="{C7159967-66DC-4F07-AFC3-3AAEC2BCAD49}"
+              s:ph="main" />
           </d>
         </r>
     - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
@@ -64,7 +61,7 @@ Languages:
       Value: 20200604T042230Z
     - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
       Hint: __Revision
-      Value: "8265a6c3-8c56-415a-921b-1bcb14c8f56c"
+      Value: "697d35b8-63ad-433f-8599-e17652b97afa"
     - ID: "b1ece12f-b2c9-44e6-92a3-c5dfd6514b59"
       Hint: Menu Title
       Value: Mentorship
@@ -74,4 +71,4 @@ Languages:
         sitecore\Admin
     - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
       Hint: __Updated
-      Value: 20220305T104456Z
+      Value: 20220305T152933Z
