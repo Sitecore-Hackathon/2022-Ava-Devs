@@ -28,4 +28,10 @@ namespace Mvp.Feature.Forms.Shared.Models
         public IEnumerable<EmploymentStatus> EmploymentStatus { get; set; }
         public IEnumerable<MVPCategory> MVPCategory { get; set; }
     }
+
+    public class MentorLists
+    {
+        public IEnumerable<Person> Mentors { get; set; }
+        
+    }
 }

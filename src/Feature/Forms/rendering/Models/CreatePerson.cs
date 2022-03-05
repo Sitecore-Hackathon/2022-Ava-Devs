@@ -18,8 +18,16 @@ namespace Mvp.Feature.Forms.Models
 
 		[JsonProperty("Email")]
 		public string Email { get; set; }
-	}
-	public class GetPerson
+        [JsonProperty("Country")]
+        public string Country { get; set; }
+        [JsonProperty("Category")]
+        public string Category { get; set; }
+        [JsonProperty("TechSkills")]
+        public string TechSkills { get; set; }
+
+
+    }
+    public class GetPerson
 	{
 		public string ItemPath { get; set; }
 	}

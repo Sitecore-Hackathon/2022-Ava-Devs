@@ -126,7 +126,12 @@ namespace Mvp.Feature.Forms
 
         }
 
-        public  Application GetApplicationModel(string applicationItemId)
+        public List<Item> GetMvpItems()
+        {
+            return _database.GetItem(Constants.Person.FolderParentMvp.FOLDER_ID).GetChildren().ToList();
+
+        }
+            public Application GetApplicationModel(string applicationItemId)
         {
             Item applicationItem = _database.GetItem(applicationItemId);
 

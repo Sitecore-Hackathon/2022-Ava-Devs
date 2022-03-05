@@ -113,7 +113,25 @@ namespace Mvp.Feature.Forms.Controllers
             }
             return Json(menteeInfoModel, JsonRequestBehavior.AllowGet);
         }
+        [HttpGet]
+        public JsonResult GetMentorLists()
+        {
+            {
+                var mvps= _service.GetMvpItems();
+                IList<Person> mvpsListResult= new List<Person>();
+                foreach(var mvp in mvps)
+                {
+                    mvpsListResult.Add(new Person { FirstName = mvp[Constants.Person.Template.Fields.PEOPLE_FIRST_NAME], 
+                        LastName = mvp[Constants.Person.Template.Fields.PEOPLE_LAST_NAME],
+                        Email = mvp[Constants.Person.Template.Fields.PEOPLE_EMAIL],
+                        CountryId = mvp[Constants.Person.Template.Fields.PEOPLE_COUNTRY], 
+                        CategoryId = mvp[Constants.Person.Template.Fields.PEOPLE_CATEGORY] });
+                }
 
+                return Json(mvpsListResult, JsonRequestBehavior.AllowGet);
+            }
+
+        }
 
         [HttpGet]
         public JsonResult GetMenteeLists()

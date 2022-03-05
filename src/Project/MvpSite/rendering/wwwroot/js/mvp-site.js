@@ -81,22 +81,37 @@ if (document.getElementById("mentee-form") != null
                 var _countryBirth = $("#ddlCountry").find("option:selected").val();
                 var _countryResidence = $("#ddlCountryResidence").find("option:selected").val();
                 var _techSkills = $('#techSkills').val();
-
+                var _email = $('#email').val();
                     $.ajax({
                         url: '/submitForm',
                         type: 'post',
                         data: {
-                            firstName: _firstName, lastName: _lastName, category: _category, countryBirth: _countryBirth,
-                            countryResidence: _countryResidence, techSkills: _techSkills
+                            firstName: _firstName, lastName: _lastName, category: _category, 
+                            countryResidence: _countryResidence, techSkills: _techSkills, email: _email
                         },
                         dataType: 'json',
                         contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
                         success: function (data) {
-                            console.log("test");
-                            console.log(data);
-                            //if (data.success === true) {
-                            //    setStep('#step_personal', 3);
-                            //}
+                            if (data.success === true) {
+                                $("#matchedMvps").attr("hidden", false);
+                                $("#matchedMvpsGrid").empty();
+
+                                if (data.list.length > 0) {
+                                    $.each(data.list, function (i, item) {
+                                        $("#matchedMvpsGrid").append(
+                                            "<div class='col-lg-4 col-sm-6 col-xs-12 card--wrapper'>" +
+                                            "<div class='card rounded-0'>" +
+                                            "<a class='content'> " +
+                                            "<div class='mvp-year'>2020</div>" +
+                                            "<img class='card-img-top' src='https://mvp.sitecore.net/images/mvp-base-user-grey.png' alt='Sitecore MVP' />" +
+                                            "<div class='card-body'><div class='mvp-category'>" + item.email + "</div><h5 class='card-title'>" + item.firstName + " " + " " + item.lastName + "</h5><p class='card-text'>Country</p></div></a></div></div>"
+                                        );
+                                    });
+                                } else {
+                                    alert("There are no mentors available");
+                                }
+                                
+                            }
                             //else {
                             //    alert(data.responseText);
                             //}
@@ -177,7 +192,7 @@ if (document.getElementById("mentee-form") != null
                         contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
                         success: function (data) {
                             if (data.success === true) {
-                                setStep('#step_personal', 3);
+                               
                             }
                             else {
                                 alert(data.responseText);

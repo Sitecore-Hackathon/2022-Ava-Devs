@@ -11,6 +11,9 @@ namespace Mvp.Feature.Forms.Shared.Models
         public string LastName { get; set; }
         public string Email { get; set; }
         public string Introduction { get; set; }
+        public string CountryId { get; set; }
+        public string CategoryId { get; set; }
+
         public Country Country { get; set; }
         public string Awards { get; set; }//item
         public string Application { get; set; }//item
@@ -18,6 +21,8 @@ namespace Mvp.Feature.Forms.Shared.Models
         public string OktaId { get; set; }
         public string ItemPath { get; set; }
         public string ItemId { get; set; }
+        public MVPCategory Category { get; set; }
+
 
     }
 }

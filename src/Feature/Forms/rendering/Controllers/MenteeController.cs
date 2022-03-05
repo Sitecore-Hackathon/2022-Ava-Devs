@@ -14,6 +14,7 @@ using System.Text;
 using static Mvp.Feature.Forms.Constants;
 using Mvp.Feature.Forms.Shared.Models;
 using System.Text.RegularExpressions;
+using System.Collections.Generic;
 
 namespace Mvp.Feature.Forms.Controllers
 {
@@ -21,7 +22,6 @@ namespace Mvp.Feature.Forms.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly ILogger<ApplicationController> _logger;
-
         public MenteeController(IConfiguration configuration, ILogger<ApplicationController> logger)
         {
             _configuration = configuration;
@@ -74,11 +74,6 @@ namespace Mvp.Feature.Forms.Controllers
         [HttpGet]
         public IActionResult GetMenteeLists()
         {
-            //TODO:need to pass identifier from the currently logged in user
-
-            //if (Sitecore.Context.IsLoggedIn && Sitecore.Context.User.Identity.IsAuthenticated) 
-            //if (!User.Identity.IsAuthenticated)
-            //    return null;
 
             // Create a request using a URL that can receive a post.
             var sitecoreCdUri = _configuration.GetValue<string>("Sitecore:InstanceUri");
@@ -145,6 +140,31 @@ namespace Mvp.Feature.Forms.Controllers
 
         }
 
+        private List<Person> GetMentorList()
+        {
+            // Create a request using a URL that can receive a post.
+            var sitecoreUri = Environment.GetEnvironmentVariable("Application_CMS_URL");
+
+            WebRequest request = WebRequest.Create($"{sitecoreUri}/api/sitecore/Mentee/GetMentorLists");
+            request.Method = "GET";
+            request.ContentType = "application/json";
+            WebResponse response = request.GetResponse();
+
+            var responseFromServer = string.Empty;
+            using (var dataStream = response.GetResponseStream())
+            {
+                // Open the stream using a StreamReader for easy access.
+                StreamReader reader = new StreamReader(dataStream);
+                // Read the content.
+                responseFromServer = reader.ReadToEnd();
+            }
+
+            // Close the response.
+            response.Close();
+            List<Person> mentorList = JsonConvert.DeserializeObject<List<Person>>(responseFromServer);
+            return mentorList;
+        }
+
         private ApplicationInfo GetMentee()
         {
             // Create a request using a URL that can receive a post.
@@ -194,10 +214,14 @@ namespace Mvp.Feature.Forms.Controllers
             return applicationInfo;
         }
 
-        private string CreateMentee(string category, string countryBirth, string countryResidence, string techSkill, string firstName, string lastName)
+
+
+
+        private string CreateMentee(string category, string countryResidence, string techSkill, string firstName, string lastName, string email)
         {
+            var createdItemId = "";
             // Login into Sitecore to authenticate next operation --> create Item 
-            var cookies = Authenticate();
+            //var cookies = Authenticate();
             //string itemNamePostFix = !string.IsNullOrEmpty(oktaId) ? oktaId.Trim() : "NoID";
             // Use SSC to create application Item
             var sitecoreUri = Environment.GetEnvironmentVariable("Application_CMS_URL");
@@ -208,7 +232,10 @@ namespace Mvp.Feature.Forms.Controllers
                 TemplateID = _configuration.GetValue<string>("Sitecore:PersonTemplateId"),
                 FirstName = firstName,
                 LastName = lastName,
-
+                Country= countryResidence,
+                Category= category,
+                TechSkills= techSkill,
+                Email= email
             };
 
             var createItemUrl = $"{sitecoreUri}{SSCAPIs.ItemApi}{$"sitecore%2Fcontent%2FMvpSite%2FMVP%20Repository%2FPeople?database=master"}";
@@ -234,148 +261,28 @@ namespace Mvp.Feature.Forms.Controllers
             //Item was created - store item ID in sesion and respond
             if (((HttpWebResponse)response).StatusCode == HttpStatusCode.Created)
             {
-                var createdItemId = response.Headers["Location"].Substring(response.Headers["Location"].LastIndexOf("/"), response.Headers["Location"].Length - response.Headers["Location"].LastIndexOf("/")).Split("?")[0].TrimStart('/');
+                createdItemId = response.Headers["Location"].Substring(response.Headers["Location"].LastIndexOf("/"), response.Headers["Location"].Length - response.Headers["Location"].LastIndexOf("/")).Split("?")[0].TrimStart('/');
                 string itemPath = GetItemPath(createdItemId);
                 return createdItemId + "||" + itemPath;
             }
 
-            return string.Empty;
-        }
-
-        [HttpGet]
-        public IActionResult SubmitForm(string category, string countryBirth, string countryResidence, string techSkill, string firstName, string lastName)
-        {
-            CreateMentee(category, countryBirth, countryResidence, techSkill, firstName, lastName);
-            return Json(new { success = true, responseText = "Mentee succesffuly updated." });
+            return createdItemId;
         }
 
         [HttpPost]
-        public IActionResult Welcome()
+        public IActionResult SubmitForm(string category, string countryResidence, string techSkills, string firstName, string lastName,string email)
         {
-            try
-            {
-                var user = HttpContext.User;
-                var identity = (ClaimsIdentity)user?.Identity;
-                var firstName = identity?.FindFirst(_configuration.GetValue<string>("Claims:FirstName"))?.Value;
-                var lastName = identity?.FindFirst(_configuration.GetValue<string>("Claims:LastName"))?.Value;
-                var email = identity?.FindFirst(_configuration.GetValue<string>("Claims:Email"))?.Value;
-                var OktaId = identity?.FindFirst(_configuration.GetValue<string>("Claims:OktaId"))?.Value;
-
-                string applicationId = "";
-                var application = GetMentee();
-                if (application != null && application.Status == ApplicationStatus.PersonItemNotFound)
-                {
-                    var personPathNId = CreatePersonItem(firstName, lastName, OktaId, email);
-
-                    applicationId = CreateApplicationItem(firstName, lastName, personPathNId.Split("||")[1], personPathNId.Split("||")[0], true);
-                }
-                else if (application != null && application.Status == ApplicationStatus.ApplicationItemNotFound)
-                {
-                    applicationId = CreateApplicationItem(firstName, lastName, application.Person.ItemPath, application.Person.ItemId, true); ;
-                }
-                else if (application != null && application.Status == ApplicationStatus.ApplicationFound)
-                {
-                    applicationId = application.Application.ApplicationId;
-
-                }
-                if (!string.IsNullOrEmpty(applicationId))
-                {
-                    dynamic dataToUpdate = new
-                    {
-                        Application = "{" + applicationId.ToUpper() + "}",
-                        Step = ItemsIds.ApplicationSteps.Category
-                    };
-
-                    UpdateItemInSc(applicationId, dataToUpdate);
-                    return Json(new { success = true, responseText = "Application succesffuly created.", applicationItemId = applicationId });
-                }
-
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, ex.Message, null);
-            }
-            return Json(new { success = false, responseText = Constants.Messages.ErrorMessage });
-
+            var menteeId = CreateMentee(category, countryResidence, techSkills, firstName, lastName,email );
+            var result = ExecuteRematch(category, countryResidence, techSkills, firstName, lastName, email);
+            return Json(new { success = true, responseText = "Rematch succesffuly done.", list = result });
         }
 
-        [HttpPost]
-        public IActionResult SubmitForm(string category, string countryBirth, string countryResidence, string techSkills)
+        private List<Person> ExecuteRematch(string category, string countryResidence, string techSkills, string firstName, string lastName, string email)
         {
-            try
-            {
-                //string applicationId = "";
+            var mentorList = GetMentorList();
 
-                //dynamic dataToUpdate = new
-                //{
-                //    Category = "{" + category.ToUpper() + "}",
-                //};
-
-                //UpdateItemInSc(applicationId, dataToUpdate);
-
-                //dataToUpdate = new
-                //{
-                //    Application = "{" + applicationId.ToUpper() + "}",
-                //    Step = ItemsIds.ApplicationSteps.PersonalInformation
-                //};
-                //UpdateItemInSc(applicationId, dataToUpdate);
-
-                return Json(new { success = true, responseText = "Category succesffuly updated." });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, ex.Message, null);
-                return Json(new { success = false, responseText = Constants.Messages.ErrorMessage });
-            }
-        }
-
-        private string CreatePersonItem(string firstName, string lastName, string oktaId, string email)
-        {
-            // Login into Sitecore to authenticate next operation --> create Item 
-            var cookies = Authenticate();
-            string itemNamePostFix = !string.IsNullOrEmpty(oktaId) ? oktaId.Trim() : "NoID";
-            // Use SSC to create application Item
-            var sitecoreUri = Environment.GetEnvironmentVariable("Application_CMS_URL");
-            var itemName = ItemUtil.ProposeValidItemName(firstName + " " + lastName + " - " + itemNamePostFix);
-            var createPerson = new CreatePerson
-            {
-                ItemName = itemName,
-                TemplateID = _configuration.GetValue<string>("Sitecore:PersonTemplateId"),
-                FirstName = firstName,
-                LastName = lastName,
-                OktaId = oktaId,
-                Email = email
-            };
-
-            var createItemUrl = $"{sitecoreUri}{SSCAPIs.ItemApi}{$"sitecore%2Fcontent%2FMvpSite%2FMVP%20Repository%2FPeople?database=master"}";
-            var request = (HttpWebRequest)WebRequest.Create(createItemUrl);
-
-            request.Method = "POST";
-            request.ContentType = "application/json";
-            request.Headers.Add("Cookie", cookies);
-
-            var requestBody = JsonConvert.SerializeObject(createPerson);
-
-            var data = new UTF8Encoding().GetBytes(requestBody);
-
-            using (var dataStream = request.GetRequestStream())
-            {
-                dataStream.Write(data, 0, data.Length);
-            }
-
-            var response = request.GetResponse();
-
-            _logger.LogDebug($"Item Status:\n\r{((HttpWebResponse)response).StatusDescription}");
-
-            //Item was created - store item ID in sesion and respond
-            if (((HttpWebResponse)response).StatusCode == HttpStatusCode.Created)
-            {
-                var createdItemId = response.Headers["Location"].Substring(response.Headers["Location"].LastIndexOf("/"), response.Headers["Location"].Length - response.Headers["Location"].LastIndexOf("/")).Split("?")[0].TrimStart('/');
-                string itemPath = GetItemPath(createdItemId);
-                return createdItemId + "||" + itemPath;
-            }
-
-            return string.Empty;
+            return mentorList.Where(x => x.CategoryId.Replace("{", "").Replace("}","").ToLower() == category.ToLower() && x.CountryId.Replace("{", "").Replace("}", "").ToLower() == countryResidence.ToLower()).ToList();
+            
         }
 
         private void UpdateItemInSc(string itemId, object dataToUpdate)
@@ -441,186 +348,6 @@ namespace Mvp.Feature.Forms.Controllers
             }
             response.Close();
             return string.Empty;
-        }
-
-        private string CreateApplicationItem(string firstName, string lastName, string path, string personId, bool updatePersonApplication)
-        {
-
-            // Login into Sitecore to authenticate next operation --> create Item 
-            var cookies = Authenticate();
-
-            // Use SSC to create application Item
-            var sitecoreUri = Environment.GetEnvironmentVariable("Application_CMS_URL");
-
-            var createApplication = new CreateApplication
-            {
-                ItemName = (DateTime.Now.Year + 1).ToString(),
-                TemplateID = _configuration.GetValue<string>("Sitecore:MVPApplicationTemplateId"),
-                FirstName = firstName,
-                LastName = lastName
-            };
-
-            //TODO - how can we get the path to the user item to pass into the item service API
-            var createItemUrl = $"{sitecoreUri}{SSCAPIs.ItemApi}{path}{"?database=master"}"; // Path need to be added to th end ex: https://%3Cdomain%3E/sitecore/api/ssc/item/sitecore%2Fcontent%2Fhome
-            var request = (HttpWebRequest)WebRequest.Create(createItemUrl);
-
-            request.Method = "POST";
-            request.ContentType = "application/json";
-            request.Headers.Add("Cookie", cookies);
-
-            var requestBody = JsonConvert.SerializeObject(createApplication);
-
-            var data = new UTF8Encoding().GetBytes(requestBody);
-
-            using (var dataStream = request.GetRequestStream())
-            {
-                dataStream.Write(data, 0, data.Length);
-            }
-
-            var response = request.GetResponse();
-
-            _logger.LogDebug($"Item Status:\n\r{((HttpWebResponse)response).StatusDescription}");
-
-            if (((HttpWebResponse)response).StatusCode == HttpStatusCode.Created)
-            {
-                var createdItemId = response.Headers["Location"].Substring(response.Headers["Location"].LastIndexOf("/"), response.Headers["Location"].Length - response.Headers["Location"].LastIndexOf("/")).Split("?")[0].TrimStart('/');
-                if (updatePersonApplication)
-                {
-                    dynamic dataToUpdate = new
-                    {
-                        Application = "{" + createdItemId.ToUpper() + "}",
-                        Step = ItemsIds.ApplicationSteps.Category
-                    };
-                    UpdateItemInSc(personId, dataToUpdate);
-
-                }
-                response.Close();
-                return createdItemId;
-            }
-            response.Close();
-            return null;
-        }
-
-        [HttpPost]
-        public IActionResult PersonalInformation(string applicationId, string firstName, string lastName, string preferredName, string employmentStatus, string companyName, string country, string state, string mentor)
-        {
-            try
-            {
-                dynamic dataToUpdate = new
-                {
-                    FirstName = firstName,
-                    LastName = lastName,
-                    PreferredName = preferredName,
-                    EmploymentStatus = !string.IsNullOrEmpty(employmentStatus) ? "{" + employmentStatus.ToUpper() + "}" : "",
-                    CompanyName = companyName ?? "",
-                    Country = !string.IsNullOrEmpty(country) ? "{" + country.ToUpper() + "}" : "",
-                    State = state ?? "",
-                    Mentor = mentor
-                };
-
-                UpdateItemInSc(applicationId, dataToUpdate);
-
-                dataToUpdate = new
-                {
-                    Application = "{" + applicationId.ToUpper() + "}",
-                    Step = ItemsIds.ApplicationSteps.Objectives
-                };
-
-                UpdateItemInSc(applicationId, dataToUpdate);
-
-                return Json(new { success = true, responseText = "Personal Information succesffuly updated." });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, ex.Message, null);
-                return Json(new { success = false, responseText = Constants.Messages.ErrorMessage });
-            }
-        }
-
-        [HttpPost]
-        public IActionResult Socials(string applicationId, string blog, string sitecoreCommunity, string stackExchange, string gitHub, string twitter, string others, bool agreeOnTerms)
-        {
-            try
-            {
-                dynamic dataToUpdate = new
-                {
-                    Blog = blog,
-                    SitecoreCommunity = sitecoreCommunity,
-                    StackExchange = stackExchange,
-                    GitHub = gitHub,
-                    Twitter = twitter,
-                    Other = others,
-                    AgreeOnTerms = agreeOnTerms ? "1" : "0"
-                };
-
-                UpdateItemInSc(applicationId, dataToUpdate);
-
-                dataToUpdate = new
-                {
-                    Application = "{" + applicationId.ToUpper() + "}",
-                    Step = ItemsIds.ApplicationSteps.Contributions
-                };
-
-                UpdateItemInSc(applicationId, dataToUpdate);
-
-                return Json(new { success = true, responseText = "Socials succesffuly updated." });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, ex.Message, null);
-                return Json(new { success = false, responseText = Constants.Messages.ErrorMessage });
-            }
-        }
-
-        [HttpPost]
-        public IActionResult NotableCurrentYearContributions(string applicationId, string onlineAcvitity, string offlineActivity)
-        {
-            try
-            {
-                dynamic dataToUpdate = new
-                {
-                    OnlineAcvitity = onlineAcvitity,
-                    OfflineActivity = offlineActivity
-                };
-
-                UpdateItemInSc(applicationId, dataToUpdate);
-
-                dataToUpdate = new
-                {
-                    Application = "{" + applicationId.ToUpper() + "}",
-                    Step = ItemsIds.ApplicationSteps.Confirmation
-                };
-
-                UpdateItemInSc(applicationId, dataToUpdate);
-
-                return Json(new { success = true, responseText = "Notable Current Year Contributions succesffuly updated." });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, ex.Message, null);
-                return Json(new { success = false, responseText = Constants.Messages.ErrorMessage });
-            }
-        }
-
-        [HttpPost]
-        public IActionResult Confirmation(string applicationId)
-        {
-            try
-            {
-                dynamic dataToUpdate = new
-                {
-                    Completed = "1"
-                };
-
-                UpdateItemInSc(applicationId, dataToUpdate);
-
-                return Json(new { success = true, responseText = "Category succesffuly updated." });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, ex.Message, null);
-                return Json(new { success = false, responseText = Constants.Messages.ErrorMessage });
-            }
         }
 
         private string Authenticate()

@@ -28,17 +28,22 @@
 
                                 <div class="form-group">
                                     <div class="form-check">
-                                        <p>By submitting my contact information, I confirm that I have read and agree to the Sitecore Privacy Policy, which explains how Sitecore collects, processes and shares my personal data. I consent to my data being processed in accordance with Sitecore’s Privacy Policy so that Sitecore can optimize my experience with the Sitecore brand.</p>
+                                        <p>By submitting your contact information, you confirm that you have read and agree to the Sitecore Privacy Policy, which explains how Sitecore collects, processes and shares my personal data to help us matching with your ideal MVP Partner.</p>
                                     </div>
                                 </div>
                                 <div class="form-group row" style="padding-left: 15px;">
                                     <div class="col-md-5 col-sm-12">
                                         <label class="fieldlabels">First Name: *</label>
-                                        <input type="text" class="form-control" id="firstName" name="firstName" placeholder="" required/>
+                                        <input type="text" class="form-control" id="firstName" name="firstName" placeholder="" required />
                                     </div>
+
                                     <div class="col-md-5 col-sm-12">
                                         <label class="fieldlabels">Last Name: *</label>
                                         <input type="text" class="form-control" id="lastName" name="lastName" placeholder="" required />
+                                    </div> 
+                                    <div class="col-md-5 col-sm-12" style="padding-top: 15px">
+                                        <label class="fieldlabels">Email: *</label>
+                                        <input type="text" class="form-control" id="email" name="email" placeholder="" required />
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -48,13 +53,6 @@
                                             <select class="form-select dropdown" id="dllcategory" asp-for="mvpcategory" required>
                                             </select>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-8">
-                                        <label class="fieldlabels">Country of birth: *</label>
-                                        <select class="form-select dropdown" id="ddlCountry" asp-for="country" required>
-                                        </select>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -70,10 +68,23 @@
                                         <textarea class="form-control" id="techSkills" rows="3" asp-for="onlineactivity" required></textarea>
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <div class="col-10">
+                                        <label for="onlineAcvitity">Interests and hobbies: </label>
+                                        <textarea class="form-control" id="hobbies" rows="3"></textarea>
+                                    </div>
+                                </div>
                                 <div class="col-12 toggle-submit">
-                                    <button class="btn btn-primary" id="btnMenteeForm" type="submit">Next</button>
+                                    <button class="btn btn-primary" id="btnMenteeForm" type="submit">Search</button>
                                 </div>
                             </form>
+                        </div>
+                        <div class="appStep fieldSet" id="matchedMvps" hidden>
+                            <hr />
+                            <h2 class="fs-title">Your matches!</h2>
+                            <div class"row" id="matchedMvpsGrid">
+                                
+                            </div>
                         </div>
                     </div>
                 </div>
