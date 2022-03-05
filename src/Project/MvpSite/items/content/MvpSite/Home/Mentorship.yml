@@ -46,27 +46,17 @@ Languages:
           <d
             id="{FE5D7FDF-89C0-4D99-9AA3-B5FBD009C9F3}">
             <r
-              uid="{39294090-558E-4FD8-AAA8-F4B6DAC04125}"
-              p:before="*"
-              s:ds="{8FB6BA7C-84D4-44F3-8FF1-D4E6C210418E}"
-              s:id="{AA449EA4-0695-4D4C-9CD3-E582738A355E}"
+              uid="{C663F483-8FCC-4F90-904E-9A4902F18AF3}">
+              <p:d />
+            </r>
+            <r
+              uid="{FDD9E0C1-B70F-4EF4-A80E-56409A454D64}"
+              p:after="r[@uid='{D842E8EB-450E-4348-A54A-E60CF16E9E52}']"
+              s:ds="{CFEB58CD-F3E0-41F3-9D6F-E6A3F679A79D}"
+              s:id="{DF79486F-2E7B-4EC8-8EFC-C9E6DFE813B7}"
               s:par=""
-              s:ph="/main/page-overview-panel-{3920C133-2B8C-49B6-B473-448DC3EE5DCC}-0" />
-            <r
-              uid="{9F065069-7B1C-4D7B-A2B5-D6C934C0E3AF}"
-              p:after="r[@uid='{39294090-558E-4FD8-AAA8-F4B6DAC04125}']"
-              s:ds="{64AE5870-3113-4AD0-9978-F4AC10A874CB}"
-              s:id="{A921AEC7-5DF7-4F8E-835A-6A5111CF94CF}"
-              s:par="ContentListType=%7BF0027CB2-8725-48EA-B85D-EB83E5216E5A%7D&amp;ContentListLimit=4"
-              s:ph="/main/page-overview-panel-{3920C133-2B8C-49B6-B473-448DC3EE5DCC}-0" />
-            <r
-              uid="{3920C133-2B8C-49B6-B473-448DC3EE5DCC}"
-              p:after="r[@uid='{C663F483-8FCC-4F90-904E-9A4902F18AF3}']"
-              s:id="{DF26CA0D-A60B-4349-8908-E7A62F7E7272}"
-              s:ph="main" />
-            <r
-              uid="{64CD74AD-6939-48FB-ABB9-33F2403ED031}"
-              p:after="*[1=2]" />
+              s:ph="main"
+              s:ccb="Clear on publish" />
           </d>
         </r>
     - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
@@ -74,7 +64,7 @@ Languages:
       Value: 20200604T042230Z
     - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
       Hint: __Revision
-      Value: "63f9fe35-c8a5-4db4-b359-5c343dd1a30c"
+      Value: "8265a6c3-8c56-415a-921b-1bcb14c8f56c"
     - ID: "b1ece12f-b2c9-44e6-92a3-c5dfd6514b59"
       Hint: Menu Title
       Value: Mentorship
@@ -84,4 +74,4 @@ Languages:
         sitecore\Admin
     - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
       Hint: __Updated
-      Value: 20220305T090835Z
+      Value: 20220305T104456Z
