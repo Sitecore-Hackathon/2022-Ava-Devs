@@ -79,9 +79,6 @@ namespace Mvp.Feature.Forms.Controllers
             var sitecoreCdUri = _configuration.GetValue<string>("Sitecore:InstanceUri");
             WebRequest request = WebRequest.Create($"{sitecoreCdUri}/api/sitecore/Mentee/GetMenteeLists");
 
-            //AddOktaAuthHeaders(request, HttpContext);
-
-            // Set the Method property of the request to POST.
             request.Method = "GET";
 
             // Get the response.
@@ -107,9 +104,6 @@ namespace Mvp.Feature.Forms.Controllers
         [HttpGet]
         public IActionResult GetMenteeInfo()
         {
-            //if (!User.Identity.IsAuthenticated)
-            //    return Json(new { IsLoggedIn = false });
-
             ApplicationInfo applicationInfo = GetMentee();
             if (applicationInfo != null)
             {
@@ -220,10 +214,6 @@ namespace Mvp.Feature.Forms.Controllers
         private string CreateMentee(string category, string countryResidence, string techSkill, string firstName, string lastName, string email)
         {
             var createdItemId = "";
-            // Login into Sitecore to authenticate next operation --> create Item 
-            //var cookies = Authenticate();
-            //string itemNamePostFix = !string.IsNullOrEmpty(oktaId) ? oktaId.Trim() : "NoID";
-            // Use SSC to create application Item
             var sitecoreUri = Environment.GetEnvironmentVariable("Application_CMS_URL");
             var itemName = ItemUtil.ProposeValidItemName(firstName + " " + lastName);
             var createPerson = new CreatePerson
@@ -243,8 +233,7 @@ namespace Mvp.Feature.Forms.Controllers
 
             request.Method = "POST";
             request.ContentType = "application/json";
-            //request.Headers.Add("Cookie", cookies);
-
+            
             var requestBody = JsonConvert.SerializeObject(createPerson);
 
             var data = new UTF8Encoding().GetBytes(requestBody);
@@ -285,33 +274,7 @@ namespace Mvp.Feature.Forms.Controllers
             
         }
 
-        private void UpdateItemInSc(string itemId, object dataToUpdate)
-        {
-            var sitecoreUri = Environment.GetEnvironmentVariable("Application_CMS_URL");
-            var updateItemByPathUrl = $"{sitecoreUri}{SSCAPIs.ItemApi}{itemId.Trim('{').Trim('}')}/?database=master&language=en";
-
-            var cookies = Authenticate();
-            var request = (HttpWebRequest)WebRequest.Create(updateItemByPathUrl);
-
-            request.Method = "PATCH";
-            request.ContentType = "application/json";
-            request.Headers.Add("Cookie", cookies);
-
-            var requestBody = JsonConvert.SerializeObject(dataToUpdate);
-
-            var data = new UTF8Encoding().GetBytes(requestBody);
-
-            using (var dataStream = request.GetRequestStream())
-            {
-                dataStream.Write(data, 0, data.Length);
-            }
-
-            var response = request.GetResponse();
-
-            _logger.LogDebug($"Item Status:\n\r{((HttpWebResponse)response).StatusDescription}");
-            response.Close();
-
-        }
+        
 
         private string GetItemPath(string itemId)
         {
