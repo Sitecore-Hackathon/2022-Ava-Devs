@@ -248,9 +248,14 @@ namespace Mvp.Project.MvpSite.Rendering
           new { controller = "Application", action = "GetCategories" }
         );
 
+          endpoints.MapControllerRoute(
+          "SubmitForm",
+          "SubmitForm",
+          new { controller = "Mentee", action = "SubmitForm" }
+        );
 
-        // Enables the default Sitecore URL pattern with a language prefix.
-        endpoints.MapSitecoreLocalizedRoute("sitecore", "Index", "Default");
+          // Enables the default Sitecore URL pattern with a language prefix.
+          endpoints.MapSitecoreLocalizedRoute("sitecore", "Index", "Default");
 
         // Fall back to language-less routing as well, and use the default culture (en).
         endpoints.MapFallbackToController("Index", "Default");

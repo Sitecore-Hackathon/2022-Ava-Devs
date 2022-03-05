@@ -168,6 +168,36 @@ namespace Mvp.Feature.Forms
 
         }
 
+        public void SaveMentee(string category, string countryBirth, string countryResidence, string techSkill,string firstName, string lastName)
+        {
+            Sitecore.Data.Database masterDb = Sitecore.Configuration.Factory.GetDatabase("master");
+
+            Item parentItem = Sitecore.Context.Database.GetItem(Constants.Person.Folder.FOLDER_ID);
+
+
+            var template = masterDb.GetTemplate(Constants.Person.Template.TEMPLATE_ID);
+
+            using (new Sitecore.SecurityModel.SecurityDisabler())
+            {
+                Item newItem = parentItem.Add("People1", template);
+                try
+                {
+                    
+                    if (newItem != null)
+                    {
+                        newItem.Editing.BeginEdit();
+                        newItem[Constants.Person.Template.Fields.PEOPLE_COUNTRY] = countryBirth;
+                        newItem[Constants.Person.Template.Fields.PEOPLE_FIRST_NAME] = firstName;
+                        newItem[Constants.Person.Template.Fields.PEOPLE_LAST_NAME] = lastName;
+                        newItem.Editing.EndEdit();
+                    }
+                }
+                catch
+                {
+                    newItem.Editing.CancelEdit();
+                }
+            }
+        }
         public  MVPCategory GetMVPCategoryModel(string mvpCategoryItemId)
         {
             if (string.IsNullOrWhiteSpace(mvpCategoryItemId))

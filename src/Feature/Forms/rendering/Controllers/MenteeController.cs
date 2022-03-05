@@ -194,11 +194,59 @@ namespace Mvp.Feature.Forms.Controllers
             return applicationInfo;
         }
 
-        [HttpPost]
-        public IActionResult SubmitStep(string input)
+        private string CreateMentee(string category, string countryBirth, string countryResidence, string techSkill, string firstName, string lastName)
         {
-            var appModel = new ApplicationModel();
-            return Json(appModel);
+            // Login into Sitecore to authenticate next operation --> create Item 
+            var cookies = Authenticate();
+            //string itemNamePostFix = !string.IsNullOrEmpty(oktaId) ? oktaId.Trim() : "NoID";
+            // Use SSC to create application Item
+            var sitecoreUri = Environment.GetEnvironmentVariable("Application_CMS_URL");
+            var itemName = ItemUtil.ProposeValidItemName(firstName + " " + lastName);
+            var createPerson = new CreatePerson
+            {
+                ItemName = itemName,
+                TemplateID = _configuration.GetValue<string>("Sitecore:PersonTemplateId"),
+                FirstName = firstName,
+                LastName = lastName,
+
+            };
+
+            var createItemUrl = $"{sitecoreUri}{SSCAPIs.ItemApi}{$"sitecore%2Fcontent%2FMvpSite%2FMVP%20Repository%2FPeople?database=master"}";
+            var request = (HttpWebRequest)WebRequest.Create(createItemUrl);
+
+            request.Method = "POST";
+            request.ContentType = "application/json";
+            //request.Headers.Add("Cookie", cookies);
+
+            var requestBody = JsonConvert.SerializeObject(createPerson);
+
+            var data = new UTF8Encoding().GetBytes(requestBody);
+
+            using (var dataStream = request.GetRequestStream())
+            {
+                dataStream.Write(data, 0, data.Length);
+            }
+
+            var response = request.GetResponse();
+
+            _logger.LogDebug($"Item Status:\n\r{((HttpWebResponse)response).StatusDescription}");
+
+            //Item was created - store item ID in sesion and respond
+            if (((HttpWebResponse)response).StatusCode == HttpStatusCode.Created)
+            {
+                var createdItemId = response.Headers["Location"].Substring(response.Headers["Location"].LastIndexOf("/"), response.Headers["Location"].Length - response.Headers["Location"].LastIndexOf("/")).Split("?")[0].TrimStart('/');
+                string itemPath = GetItemPath(createdItemId);
+                return createdItemId + "||" + itemPath;
+            }
+
+            return string.Empty;
+        }
+
+        [HttpGet]
+        public IActionResult SubmitForm(string category, string countryBirth, string countryResidence, string techSkill, string firstName, string lastName)
+        {
+            CreateMentee(category, countryBirth, countryResidence, techSkill, firstName, lastName);
+            return Json(new { success = true, responseText = "Mentee succesffuly updated." });
         }
 
         [HttpPost]
