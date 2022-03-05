@@ -7,7 +7,7 @@
 		<IsDeploymentModule>true</IsDeploymentModule>
 		<OutputFolderName>mvp-rendering</OutputFolderName>
 		<DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
-		<DockerfileContext>..\..\..\..</DockerfileContext>
+		<DockerfileContext>..\..\..\..\..</DockerfileContext>
 		<AssemblyName>Mvp.Project.MvpSite</AssemblyName>
 		<RootNamespace>Mvp.Project.MvpSite</RootNamespace>
 	</PropertyGroup>
@@ -34,7 +34,6 @@
 		<PackageReference Include="Microsoft.AspNetCore.Session" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
 		<PackageReference Include="Microsoft.Extensions.Http" />
-		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets"  />
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" />
 		<PackageReference Include="Sitecore.LayoutService.Client" />
 		<PackageReference Include="Sitecore.AspNet.RenderingEngine" />
