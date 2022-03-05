@@ -193,6 +193,7 @@ namespace Mvp.Feature.Forms.Controllers
             ApplicationInfo applicationInfo = JsonConvert.DeserializeObject<ApplicationInfo>(responseFromServer);
             return applicationInfo;
         }
+
         [HttpPost]
         public IActionResult SubmitStep(string input)
         {
@@ -248,6 +249,36 @@ namespace Mvp.Feature.Forms.Controllers
             }
             return Json(new { success = false, responseText = Constants.Messages.ErrorMessage });
 
+        }
+
+        [HttpPost]
+        public IActionResult SubmitForm(string category, string countryBirth, string countryResidence, string techSkills)
+        {
+            try
+            {
+                //string applicationId = "";
+
+                //dynamic dataToUpdate = new
+                //{
+                //    Category = "{" + category.ToUpper() + "}",
+                //};
+
+                //UpdateItemInSc(applicationId, dataToUpdate);
+
+                //dataToUpdate = new
+                //{
+                //    Application = "{" + applicationId.ToUpper() + "}",
+                //    Step = ItemsIds.ApplicationSteps.PersonalInformation
+                //};
+                //UpdateItemInSc(applicationId, dataToUpdate);
+
+                return Json(new { success = true, responseText = "Category succesffuly updated." });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message, null);
+                return Json(new { success = false, responseText = Constants.Messages.ErrorMessage });
+            }
         }
 
         private string CreatePersonItem(string firstName, string lastName, string oktaId, string email)
@@ -423,35 +454,6 @@ namespace Mvp.Feature.Forms.Controllers
         }
 
         [HttpPost]
-        public IActionResult Category(string applicationId, string category)
-        {
-            try
-            {
-
-                dynamic dataToUpdate = new
-                {
-                    Category = "{" + category.ToUpper() + "}",
-                };
-
-                UpdateItemInSc(applicationId, dataToUpdate);
-
-                dataToUpdate = new
-                {
-                    Application = "{" + applicationId.ToUpper() + "}",
-                    Step = ItemsIds.ApplicationSteps.PersonalInformation
-                };
-                UpdateItemInSc(applicationId, dataToUpdate);
-
-                return Json(new { success = true, responseText = "Category succesffuly updated." });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, ex.Message, null);
-                return Json(new { success = false, responseText = Constants.Messages.ErrorMessage });
-            }
-        }
-
-        [HttpPost]
         public IActionResult PersonalInformation(string applicationId, string firstName, string lastName, string preferredName, string employmentStatus, string companyName, string country, string state, string mentor)
         {
             try
@@ -479,36 +481,6 @@ namespace Mvp.Feature.Forms.Controllers
                 UpdateItemInSc(applicationId, dataToUpdate);
 
                 return Json(new { success = true, responseText = "Personal Information succesffuly updated." });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, ex.Message, null);
-                return Json(new { success = false, responseText = Constants.Messages.ErrorMessage });
-            }
-        }
-
-        [HttpPost]
-        public IActionResult ObjectivesandMotivation(string applicationId, string eligibility, string objectives)
-        {
-            try
-            {
-                dynamic dataToUpdate = new
-                {
-                    Eligibility = eligibility,
-                    Objectives = objectives
-                };
-
-                UpdateItemInSc(applicationId, dataToUpdate);
-
-                dataToUpdate = new
-                {
-                    Application = "{" + applicationId.ToUpper() + "}",
-                    Step = ItemsIds.ApplicationSteps.Socials
-                };
-
-                UpdateItemInSc(applicationId, dataToUpdate);
-
-                return Json(new { success = true, responseText = "Objectives and Motivation succesffuly updated." });
             }
             catch (Exception ex)
             {
