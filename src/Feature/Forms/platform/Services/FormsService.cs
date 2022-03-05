@@ -84,6 +84,47 @@ namespace Mvp.Feature.Forms
             return null;
         }
 
+        public Mentee GetMenteeModel(string applicationItemId)
+        {
+            Item applicationItem = _database.GetItem(applicationItemId);
+
+            if (applicationItem == null)
+                return null;
+
+            var mentee = new Mentee()
+            {
+                ApplicationId = applicationItem.ID.ToString().TrimStart('{').TrimEnd('}'),
+                OfficialFirstName = applicationItem.Fields[Constants.Application.Template.Fields.OFFICIAL_FIRST_NAME].Value,
+                OfficialLastName = applicationItem.Fields[Constants.Application.Template.Fields.OFFICIAL_LAST_NAME].Value,
+                PreferredName = applicationItem.Fields[Constants.Application.Template.Fields.PREFERRED_NAME].Value,
+                CompanyName = applicationItem.Fields[Constants.Application.Template.Fields.COMPANY_NAME].Value,
+                Mentor = applicationItem.Fields[Constants.Application.Template.Fields.MENTOR].Value,
+                Eligibility = applicationItem.Fields[Constants.Application.Template.Fields.ELIGIBILITY].Value,
+                Objectives = applicationItem.Fields[Constants.Application.Template.Fields.OBJECTIVES].Value,
+                Blog = applicationItem.Fields[Constants.Application.Template.Fields.BLOG].Value,
+                SitecoreCommunity = applicationItem.Fields[Constants.Application.Template.Fields.SITECORE_COMMUNITY].Value,
+                CustomerCoreProfile = applicationItem.Fields[Constants.Application.Template.Fields.CUSTOMER_CORE_PROFILE].Value,
+                StackExchange = applicationItem.Fields[Constants.Application.Template.Fields.STACK_EXCHANGE].Value,
+                GitHub = applicationItem.Fields[Constants.Application.Template.Fields.GITHUB].Value,
+                Twitter = applicationItem.Fields[Constants.Application.Template.Fields.TWITTER].Value,
+                Other = applicationItem.Fields[Constants.Application.Template.Fields.OTHER].Value,
+                OnlineActivity = applicationItem.Fields[Constants.Application.Template.Fields.ONLINE_ACTIVITY].Value,
+                OfflineActivity = applicationItem.Fields[Constants.Application.Template.Fields.OFFLINE_ACTIVITY].Value,
+                Step = applicationItem.Fields[Constants.Application.Template.Fields.STEP].Value,
+
+                MVPCategory = GetMVPCategoryModel(applicationItem.Fields[Constants.Application.Template.Fields.CATEGORY].Value),
+                Country = GetCountryModel(applicationItem.Fields[Constants.Application.Template.Fields.COUNTRY].Value),
+                // State = GetStateModel(applicationItem.Fields[Constants.Application.Template.Fields.STATE].Value),
+                EmploymentStatus = GetEmploymentStatusModel(applicationItem.Fields[Constants.Application.Template.Fields.EMPLOYMENT_STATUS].Value),
+                Completed = (applicationItem.Fields[Constants.Application.Template.Fields.COMPLETED].Value ?? "0") == "1",
+                AgreeOnTerms = (applicationItem.Fields[Constants.Application.Template.Fields.AGREEONTERMS].Value ?? "0") == "1",
+            };
+
+
+
+            return mentee;
+
+        }
 
         public  Application GetApplicationModel(string applicationItemId)
         {

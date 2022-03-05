@@ -31,6 +31,19 @@ namespace Mvp.Feature.Forms.Extensions
                  );
 
                 endpoints.MapControllerRoute(
+                      name: "getMenteelists",
+                      pattern: "mentee/getmenteelists",
+
+                      new { controller = "Mentee", action = "GetMenteeLists" }
+                 );
+                endpoints.MapControllerRoute(
+                      name: "getMenteeInfo",
+                      pattern: "mentee/getmenteeinfo",
+
+                      new { controller = "Mentee", action = "GetMenteeInfo" }
+                 );
+
+                endpoints.MapControllerRoute(
                     "submitApplication",
                     "application/submitApplication",
                     new { controller = "Application", action = "SubmitStep" }
