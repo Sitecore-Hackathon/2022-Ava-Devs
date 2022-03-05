@@ -7,17 +7,23 @@
         }
     });
 
-    if (document.getElementById("application-form") == null) {
+    if (document.getElementById("application-form") == null &&
+	document.getElementById("mentee-form") == null
+	) {
         return;
     }
 
 
+if (document.getElementById("application-form") != null 
+	) {
+		
     $(document).ajaxSend(function () {
         $("#overlay").fadeIn(300);
     });
 
     fillApplicationList();
     getApplicationInfo();
+
 
     var currentStepId = 1;
     //Comment/uncomment each of the steps if you need to review single screen for starting
@@ -29,6 +35,30 @@
     //var currentStep = "#step_socials"; 
     //var currentStep = "#step_contributions"; 
     //var currentStep = "#step_confirmation"; 
+}
+
+if (document.getElementById("mentee-form") != null 
+	) {
+		
+    //$(document).ajaxSend(function () {
+    //    $("#overlay").fadeIn(300);
+    //});
+
+    fillMenteeList();
+    getApplicationInfo2();
+
+
+    var currentStepId = 1;
+    //Comment/uncomment each of the steps if you need to review single screen for starting
+    //var currentStep = "#step_welcome";
+    var currentStep = "#step_category"; 
+    //var currentStep = "#step_personal"; 
+    //var currentStep = "#step_objectives"; 
+    //var currentStep = "#step_socials"; 
+    //var currentStep = "#step_socials"; 
+    //var currentStep = "#step_contributions"; 
+    //var currentStep = "#step_confirmation"; 
+}
 
    //setStep(currentStep);
 
@@ -419,6 +449,37 @@ function setProgressBar(curStep) {
         .css("width", percent + "%")
 }
 
+function fillMenteeList() {
+    $.ajax({
+        type: "GET",
+        url: "/Mentee/GetMenteeLists",
+        async: false,
+        data: {
+
+        },
+        success: function (data) {
+
+            if (data.result) {
+                //something is wrong 
+                console.info(data.result);
+            } else {
+                var jsonData = JSON.parse(data);
+
+                fillDropLists(jsonData.Country, 'Country', 'Name');
+                fillDropLists(jsonData.EmploymentStatus, 'EmploymentStatus', 'Name');
+                fillDropLists(jsonData.MVPCategory, 'mvpcategory', 'Name');
+
+            }
+            $("#overlay").fadeOut();
+        },
+        error: function (result) {
+
+            console.error(result);
+            $("#overlay").fadeOut();
+        }
+    });
+}
+
 
 function fillApplicationList() {
     $.ajax({
@@ -451,6 +512,11 @@ function fillApplicationList() {
     });
 }
 
+function getApplicationInfo2() {
+    setStep('#step_welcome')
+    $('.application-visibility').show();
+    $("#overlay").fadeOut();
+}
 function getApplicationInfo() {
 	$.ajax({
 		type: "GET",
