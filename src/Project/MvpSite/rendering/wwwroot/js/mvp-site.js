@@ -75,6 +75,8 @@ if (document.getElementById("mentee-form") != null
                 //}
                 //else {
                     var _applicationId = $('#applicationId').val();
+                var _firstName = $('#firstName').val();
+                var _lastName = $('#lastName').val();
                 var _category = $("#dllcategory").find("option:selected").val();
                 var _countryBirth = $("#ddlCountry").find("option:selected").val();
                 var _countryResidence = $("#ddlCountryResidence").find("option:selected").val();
@@ -83,7 +85,10 @@ if (document.getElementById("mentee-form") != null
                     $.ajax({
                         url: '/submitFormMentee',
                         type: 'post',
-                        data: { category: _category, countryBirth: _countryBirth, countryResidence: _countryResidence, techSkills: _techSkills },
+                        data: {
+                            firstName: _firstName, lastName: _lastName, category: _category, countryBirth: _countryBirth,
+                            countryResidence: _countryResidence, techSkills: _techSkills
+                        },
                         dataType: 'json',
                         contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
                         success: function (data) {

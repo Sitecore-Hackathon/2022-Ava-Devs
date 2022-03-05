@@ -25,16 +25,20 @@
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="form-group">
                                     <div class="form-check">
                                         <p>By submitting my contact information, I confirm that I have read and agree to the Sitecore Privacy Policy, which explains how Sitecore collects, processes and shares my personal data. I consent to my data being processed in accordance with Sitecore’s Privacy Policy so that Sitecore can optimize my experience with the Sitecore brand.</p>
                                     </div>
                                 </div>
-
-                                <div class="form-group">
-                                    <div class="col-8">
-                                        <label class="fieldlabels">Mentee Name: </label>
-                                        <input type="text" class="form-control" id="mentor" name="mentor" placeholder="mentor" asp-for="mentor" />
+                                <div class="form-group row" style="padding-left: 15px;">
+                                    <div class="col-md-5 col-sm-12">
+                                        <label class="fieldlabels">First Name: *</label>
+                                        <input type="text" class="form-control" id="firstName" name="firstName" placeholder="" required/>
+                                    </div>
+                                    <div class="col-md-5 col-sm-12">
+                                        <label class="fieldlabels">Last Name: *</label>
+                                        <input type="text" class="form-control" id="lastName" name="lastName" placeholder="" required />
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -61,7 +65,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <div class="col-12">
+                                    <div class="col-10">
                                         <label for="onlineAcvitity">Tech skills: *</label>
                                         <textarea class="form-control" id="techSkills" rows="3" asp-for="onlineactivity" required></textarea>
                                     </div>
