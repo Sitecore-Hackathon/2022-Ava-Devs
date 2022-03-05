@@ -7,7 +7,7 @@
 		<IsDeploymentModule>true</IsDeploymentModule>
 		<OutputFolderName>mvp-rendering</OutputFolderName>
 		<DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
-		<DockerfileContext>..\..\..\..\..</DockerfileContext>
+		<DockerfileContext>..\..\..\..</DockerfileContext>
 		<AssemblyName>Mvp.Project.MvpSite</AssemblyName>
 		<RootNamespace>Mvp.Project.MvpSite</RootNamespace>
 	</PropertyGroup>
