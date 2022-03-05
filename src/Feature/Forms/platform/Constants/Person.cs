@@ -24,6 +24,8 @@ namespace Mvp.Feature.Forms.Constants
                 public static ID PEOPLE_EMAIL = ID.Parse("{8561A65D-741E-4EAD-985E-EA1880E196A9}");
                 public static ID PEOPLE_APPLICATION = ID.Parse("{55701D4E-E6FD-4340-83AC-7DC3265DA612}");
                 public static ID PEOPLE_APPLICATION_STEP = ID.Parse("{512180D8-71CF-4192-A692-36211100557E}");
+                public static ID PEOPLE_COUNTRY = ID.Parse("{046FB914-F54F-4E3A-85E8-8EA5E3B7DB7F}");
+
             }
         }
     }
