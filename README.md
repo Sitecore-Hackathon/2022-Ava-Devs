@@ -29,7 +29,7 @@
 <p>⟹ Since our solution is based in MVP site solution, please make sure to check their pre requisites at this link <a href="https://github.com/sitecore/mvp-site">https://github.com/sitecore/mvp-site</a></p>
 <h2 id="installation-instructions">Installation instructions</h2>
 <ol>
-<li>Follow the MVP site solution steps</li>
+<li>Follow the MVP site solution steps from here https://github.com/sitecore/mvp-site</li>
 <li>Run this command:  dotnet sitecore login –authority https:// –cm http:// –allow-write true</li>
 <li>Publish the site</li>
 </ol>
