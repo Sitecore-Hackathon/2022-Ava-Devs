@@ -24,7 +24,7 @@
 <h2 id="description">Description</h2>
 <p>Pursuing the MVP program is not easy and finding an appropriate guidance can make the difference to achieve the dreamed recognition. We solve this problem by giving a mentee the possibility to apply for a mentor according to the MVP type he/she want to be, Sitecore feature he/she prefer and last but not least the time facilities. The easiest path to achieve our MVP starts at finding the right mentor.</p>
 <h2 id="video-link">Video Link</h2>
-<p>⟹  <a href="https://github.com/Sitecore-Hackathon/2022-Ava-Devs/blob/ava/ENTRYFORM.md#video-link">Replace this Video link</a></p>
+<p>⟹  <a href="https://youtu.be/vGZqBhRCFUI">Replace this Video link</a></p>
 <h2 id="pre-requisites-and-dependencies">Pre-requisites and Dependencies</h2>
 <p>⟹ Since our solution is based in MVP site solution, please make sure to check their pre requisites at this link <a href="https://github.com/sitecore/mvp-site">https://github.com/sitecore/mvp-site</a></p>
 <h2 id="installation-instructions">Installation instructions</h2>
